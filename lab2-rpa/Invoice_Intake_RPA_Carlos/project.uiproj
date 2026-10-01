@@ -1,0 +1,6 @@
+{
+  "Name": "Invoice_Intake_RPA_Carlos",
+  "ProjectType": "Process",
+  "Description": "Lab 2: bucket -> extraction agent -> validate -> AP_Invoice_Carlos record -> InvoiceQueue_Carlos item",
+  "MainFile": "Main.xaml"
+}

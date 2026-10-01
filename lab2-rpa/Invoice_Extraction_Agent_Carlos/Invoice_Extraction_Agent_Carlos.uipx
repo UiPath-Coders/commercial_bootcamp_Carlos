@@ -1,0 +1,12 @@
+{
+  "DocVersion": "1.0.0",
+  "StudioMinVersion": "2025.10.0",
+  "SolutionId": "146033a9-4f18-4afb-b9ac-9d615027b4a1",
+  "Projects": [
+    {
+      "Type": "Agent",
+      "ProjectRelativePath": "Invoice_Extraction_Agent_Carlos/project.uiproj",
+      "Id": "7d02dc91-f103-4c88-8424-de99042c3e1c"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "Invoice_Extraction_Agent_Carlos",
+    "kind": "package",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "projectKey": "7d02dc91-f103-4c88-8424-de99042c3e1c",
+    "isOverridable": true,
+    "dependencies": [],
+    "runtimeDependencies": [],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "name": "Invoice_Extraction_Agent_Carlos"
+    },
+    "locks": [],
+    "key": "736c3c31-05ee-4d75-80aa-cd53ba1f888c",
+    "files": []
+  }
+}
