@@ -1,0 +1,22 @@
+[project]
+name = "Invoice_Approval_Agent_Carlos"
+version = "0.0.1"
+description = "Lab 5 invoice approval agent: deterministic gates and an LLM narrative written back to the AP_Invoice_Carlos record"
+authors = [{ name = "Carlos Portillo" }]
+dependencies = [
+    "uipath-langchain[bedrock,vertex]>=0.18.0, <0.19.0",
+]
+requires-python = ">=3.11"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "uipath-dev>=0.0.85",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["ignore::FutureWarning", "ignore::DeprecationWarning"]
