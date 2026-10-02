@@ -1,0 +1,13 @@
+{
+  "id": "8b4bcd7c-e789-48ab-aabc-7b1e3f3f7317",
+  "functions": {
+    "po_lookup": "main.py:po_lookup",
+    "process_invoice": "main.py:process_invoice",
+    "process_invoice_queue": "main.py:process_invoice_queue",
+    "get_invoice_status": "main.py:get_invoice_status"
+  },
+  "packOptions": {
+    "directoriesExcluded": ["tests", ".venv", ".uipath", "__uipath", "__pycache__", ".pytest_cache"],
+    "filesExcluded": [".env"]
+  }
+}

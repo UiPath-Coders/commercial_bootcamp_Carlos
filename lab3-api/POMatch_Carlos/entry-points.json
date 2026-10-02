@@ -1,0 +1,1250 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "po_lookup",
+            "uniqueId": "d36f1778-66b9-446f-b9d8-7e8881038855",
+            "type": "function",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "vendor_name": {
+                        "title": "Vendor Name",
+                        "type": "string"
+                    },
+                    "po_number": {
+                        "title": "Po Number",
+                        "type": "string"
+                    },
+                    "invoice_total": {
+                        "title": "Invoice Total",
+                        "type": "number"
+                    },
+                    "currency": {
+                        "default": "USD",
+                        "title": "Currency",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "vendor_name",
+                    "po_number",
+                    "invoice_total"
+                ],
+                "title": "POLookupInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "po_matched": {
+                        "default": false,
+                        "title": "Po Matched",
+                        "type": "boolean"
+                    },
+                    "approval_required": {
+                        "default": true,
+                        "title": "Approval Required",
+                        "type": "boolean"
+                    },
+                    "open_amount": {
+                        "default": 0.0,
+                        "title": "Open Amount",
+                        "type": "number"
+                    },
+                    "match_reason": {
+                        "default": "",
+                        "title": "Match Reason",
+                        "type": "string"
+                    },
+                    "error_type": {
+                        "default": "",
+                        "title": "Error Type",
+                        "type": "string"
+                    },
+                    "error_message": {
+                        "default": "",
+                        "title": "Error Message",
+                        "type": "string"
+                    }
+                },
+                "required": [],
+                "title": "POLookupOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:255",
+                        "name": "po_lookup",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:244",
+                        "name": "_lookup",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:89",
+                        "name": "erp_po_lookup_url",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:80",
+                        "name": "erp_api_url",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:164",
+                        "name": "evaluate_po",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:190",
+                        "name": "_lookup_failed",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:109",
+                        "name": "redact",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:139",
+                        "name": "parse_po_response",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:101",
+                        "name": "_erp_client",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:93",
+                        "name": "_erp_timeout",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main.py:89",
+                        "target": "main.py:80"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:89"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:164"
+                    },
+                    {
+                        "source": "main.py:190",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:139"
+                    },
+                    {
+                        "source": "main.py:101",
+                        "target": "main.py:93"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:101"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:255",
+                        "target": "main.py:244"
+                    },
+                    {
+                        "source": "main.py:255",
+                        "target": "main.py:190"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "process_invoice",
+            "uniqueId": "e42d8987-cb89-4c1f-baa8-dda5ff48fbbf",
+            "type": "function",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "record_id": {
+                        "title": "Record Id",
+                        "type": "string"
+                    },
+                    "entity_name": {
+                        "default": "AP_Invoice_Carlos",
+                        "title": "Entity Name",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "record_id"
+                ],
+                "title": "ProcessInvoiceInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "record_id": {
+                        "default": "",
+                        "title": "Record Id",
+                        "type": "string"
+                    },
+                    "po_matched": {
+                        "default": false,
+                        "title": "Po Matched",
+                        "type": "boolean"
+                    },
+                    "approval_required": {
+                        "default": true,
+                        "title": "Approval Required",
+                        "type": "boolean"
+                    },
+                    "open_amount": {
+                        "default": 0.0,
+                        "title": "Open Amount",
+                        "type": "number"
+                    },
+                    "match_reason": {
+                        "default": "",
+                        "title": "Match Reason",
+                        "type": "string"
+                    },
+                    "error_type": {
+                        "default": "",
+                        "title": "Error Type",
+                        "type": "string"
+                    },
+                    "error_message": {
+                        "default": "",
+                        "title": "Error Message",
+                        "type": "string"
+                    }
+                },
+                "required": [],
+                "title": "ProcessInvoiceOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:407",
+                        "name": "process_invoice",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:324",
+                        "name": "_get_field",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:244",
+                        "name": "_lookup",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:89",
+                        "name": "erp_po_lookup_url",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:80",
+                        "name": "erp_api_url",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:164",
+                        "name": "evaluate_po",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:190",
+                        "name": "_lookup_failed",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:109",
+                        "name": "redact",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:139",
+                        "name": "parse_po_response",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:101",
+                        "name": "_erp_client",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:93",
+                        "name": "_erp_timeout",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:362",
+                        "name": "_process_failed",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:307",
+                        "name": "_read_record",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:283",
+                        "name": "_entity_id",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:273",
+                        "name": "sdk",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:292",
+                        "name": "_is_not_found",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:312",
+                        "name": "_write_record",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:338",
+                        "name": "_as_text",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:89",
+                        "target": "main.py:80"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:89"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:164"
+                    },
+                    {
+                        "source": "main.py:190",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:139"
+                    },
+                    {
+                        "source": "main.py:101",
+                        "target": "main.py:93"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:101"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:244"
+                    },
+                    {
+                        "source": "main.py:362",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:283",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:283"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:292"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:307"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:312",
+                        "target": "main.py:283"
+                    },
+                    {
+                        "source": "main.py:312",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:312"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "process_invoice_queue",
+            "uniqueId": "06fa1b98-bfbf-4a61-929d-1de89162e495",
+            "type": "function",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "queue_name": {
+                        "default": "InvoiceQueue_Carlos",
+                        "title": "Queue Name",
+                        "type": "string"
+                    },
+                    "folder_path": {
+                        "default": "Agentic Bootcamp/APAutomation_Carlos",
+                        "title": "Folder Path",
+                        "type": "string"
+                    },
+                    "entity_name": {
+                        "default": "AP_Invoice_Carlos",
+                        "title": "Entity Name",
+                        "type": "string"
+                    },
+                    "max_items": {
+                        "default": 50,
+                        "title": "Max Items",
+                        "type": "integer"
+                    }
+                },
+                "required": [],
+                "title": "ProcessInvoiceQueueInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "processed": {
+                        "default": 0,
+                        "title": "Processed",
+                        "type": "integer"
+                    },
+                    "matched": {
+                        "default": 0,
+                        "title": "Matched",
+                        "type": "integer"
+                    },
+                    "approval_required": {
+                        "default": 0,
+                        "title": "Approval Required",
+                        "type": "integer"
+                    },
+                    "failed": {
+                        "default": 0,
+                        "title": "Failed",
+                        "type": "integer"
+                    },
+                    "errors": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Errors",
+                        "type": "array"
+                    }
+                },
+                "required": [],
+                "title": "ProcessInvoiceQueueOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:534",
+                        "name": "process_invoice_queue",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:471",
+                        "name": "_transaction_id",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:446",
+                        "name": "_start_transaction",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:273",
+                        "name": "sdk",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:407",
+                        "name": "process_invoice",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:324",
+                        "name": "_get_field",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:244",
+                        "name": "_lookup",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:89",
+                        "name": "erp_po_lookup_url",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:164",
+                        "name": "evaluate_po",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:190",
+                        "name": "_lookup_failed",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:139",
+                        "name": "parse_po_response",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:101",
+                        "name": "_erp_client",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:109",
+                        "name": "redact",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:362",
+                        "name": "_process_failed",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:307",
+                        "name": "_read_record",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:283",
+                        "name": "_entity_id",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:292",
+                        "name": "_is_not_found",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:312",
+                        "name": "_write_record",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:338",
+                        "name": "_as_text",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:475",
+                        "name": "_business_failure",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:456",
+                        "name": "_complete_transaction",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:451",
+                        "name": "_is_empty_body_error",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:471"
+                    },
+                    {
+                        "source": "main.py:446",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:446",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:446"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:89"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:164"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:139"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:101"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:190"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:244",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:244"
+                    },
+                    {
+                        "source": "main.py:362",
+                        "target": "main.py:109"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:283"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:292"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:307"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:312",
+                        "target": "main.py:283"
+                    },
+                    {
+                        "source": "main.py:312",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:312"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:362"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:407",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:407"
+                    },
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:475"
+                    },
+                    {
+                        "source": "main.py:456",
+                        "target": "main.py:451"
+                    },
+                    {
+                        "source": "main.py:456",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:456"
+                    },
+                    {
+                        "source": "main.py:534",
+                        "target": "main.py:338"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "get_invoice_status",
+            "uniqueId": "c23d2c36-9f5a-40f6-9521-1a7948797b71",
+            "type": "function",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "record_id": {
+                        "title": "Record Id",
+                        "type": "string"
+                    },
+                    "entity_name": {
+                        "default": "AP_Invoice_Carlos",
+                        "title": "Entity Name",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "record_id"
+                ],
+                "title": "GetInvoiceStatusInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "record_id": {
+                        "default": "",
+                        "title": "Record Id",
+                        "type": "string"
+                    },
+                    "invoice_lifecycle_state": {
+                        "default": "",
+                        "title": "Invoice Lifecycle State",
+                        "type": "string"
+                    },
+                    "approval_needed": {
+                        "default": true,
+                        "title": "Approval Needed",
+                        "type": "boolean"
+                    },
+                    "posted_to_erp": {
+                        "default": false,
+                        "title": "Posted To Erp",
+                        "type": "boolean"
+                    },
+                    "reviewed_by": {
+                        "default": "",
+                        "title": "Reviewed By",
+                        "type": "string"
+                    },
+                    "reviewed_at": {
+                        "default": "",
+                        "title": "Reviewed At",
+                        "type": "string"
+                    },
+                    "found": {
+                        "default": false,
+                        "title": "Found",
+                        "type": "boolean"
+                    },
+                    "error_type": {
+                        "default": "",
+                        "title": "Error Type",
+                        "type": "string"
+                    },
+                    "error_message": {
+                        "default": "",
+                        "title": "Error Message",
+                        "type": "string"
+                    }
+                },
+                "required": [],
+                "title": "GetInvoiceStatusOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:578",
+                        "name": "get_invoice_status",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:307",
+                        "name": "_read_record",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:283",
+                        "name": "_entity_id",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:273",
+                        "name": "sdk",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:292",
+                        "name": "_is_not_found",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:338",
+                        "name": "_as_text",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:334",
+                        "name": "_as_bool",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:324",
+                        "name": "_get_field",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "main.py:109",
+                        "name": "redact",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main.py:283",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:283"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:292"
+                    },
+                    {
+                        "source": "main.py:307",
+                        "target": "main.py:273"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:307"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:334"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:334"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:338"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:324"
+                    },
+                    {
+                        "source": "main.py:578",
+                        "target": "main.py:109"
+                    }
+                ]
+            }
+        }
+    ]
+}

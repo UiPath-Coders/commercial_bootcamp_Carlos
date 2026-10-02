@@ -1,0 +1,12 @@
+# uv run uipath auth writes the login here; .uipath/.auth.json holds an access token
+.uipath/
+.env
+.env.*
+!.env.example
+# local runtime state and caches
+__uipath/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.nupkg

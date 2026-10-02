@@ -1,0 +1,18 @@
+[project]
+name = "POMatch_Carlos"
+version = "0.0.2"
+description = "Match PO and Check Approval"
+authors = [{ name = "Carlos Portillo", email = "carlos.portillo@uipath.com" }]
+dependencies = [
+    "uipath>=2.14.0, <2.15.0",
+    "httpx>=0.28",
+]
+requires-python = ">=3.11"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
