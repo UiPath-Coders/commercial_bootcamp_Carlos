@@ -1,0 +1,6 @@
+{
+  "Name": "PostToERP_Carlos",
+  "ProjectType": "Process",
+  "Description": "Posts one ready AP_Invoice_Carlos invoice to the AP portal (standalone or exact-record mode)",
+  "MainFile": "Main.xaml"
+}

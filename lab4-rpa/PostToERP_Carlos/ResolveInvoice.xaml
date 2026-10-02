@@ -1,0 +1,453 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ResolveInvoice" mva:VisualBasic.Settings="{x:Null}"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:PostToERP_Carlos;assembly=DataService.PostToERP_Carlos"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:uda="clr-namespace:UiPath.DataService.Activities;assembly=UiPath.DataService.Activities.Core"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_RecordId" Type="InArgument(x:String)" />
+    <x:Property Name="in_ApprovalConfirmed" Type="InArgument(x:Boolean)" />
+    <x:Property Name="out_RecordId" Type="OutArgument(x:String)" />
+    <x:Property Name="out_ReadyToPost" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="out_AlreadyPosted" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="out_ErrorMessage" Type="OutArgument(x:String)" />
+    <x:Property Name="out_InvoiceNumber" Type="OutArgument(x:String)" />
+    <x:Property Name="out_VendorName" Type="OutArgument(x:String)" />
+    <x:Property Name="out_PONumber" Type="OutArgument(x:String)" />
+    <x:Property Name="out_TotalAmountText" Type="OutArgument(x:String)" />
+  </x:Members>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.Globalization</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.DataService.Activities</x:String>
+      <x:String>UiPath.DataService.Activities.Models</x:String>
+      <x:String>UiPath.DataService.Definition</x:String>
+      <x:String>PostToERP_Carlos</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.DataService.Activities.Core</AssemblyReference>
+      <AssemblyReference>UiPath.DataService.Definition</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>DataService.PostToERP_Carlos</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="ResolveInvoice - pick the next ready AP_Invoice_Carlos record or validate the supplied one" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:IList(local:AP_Invoice_Carlos)" Name="allRecords" />
+      <Variable x:TypeArguments="scg:List(local:AP_Invoice_Carlos)" Name="readyRecords" />
+      <Variable x:TypeArguments="x:Int64" Name="totalRecords" Default="0" />
+      <Variable x:TypeArguments="local:AP_Invoice_Carlos" Name="selectedRecord" />
+      <Variable x:TypeArguments="s:Guid" Name="recordGuid" />
+      <Variable x:TypeArguments="x:String" Name="requestedRecordId" />
+    </Sequence.Variables>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign requestedRecordId (trimmed input)" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[requestedRecordId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[If(in_RecordId, String.Empty).Trim()]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign out_RecordId = requested id" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_RecordId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[requestedRecordId]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_ReadyToPost = False" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[out_ReadyToPost]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_AlreadyPosted = False" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[out_AlreadyPosted]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage = empty" sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If DisplayName="If RecordId is blank (standalone mode)" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">[String.IsNullOrWhiteSpace(requestedRecordId)]</InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="Standalone - first ready record, oldest first" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <ui:LogMessage DisplayName="Log standalone query" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="Standalone mode: querying AP_Invoice_Carlos ordered by ProcessedTimestamp; the ready rule (POMatched true, ApprovalNeeded false, PostedToERP not true) is applied in LINQ after the query" />
+          <ui:RetryScope DisplayName="Retry Scope - Data Fabric query (transient faults)" NumberOfRetries="3" RetryInterval="00:00:05" sap2010:WorkflowViewState.IdRef="RetryScope_1" sap2010:Annotation.AnnotationText="Read-only query, safe to retry. One transient Data Fabric fault should not fault the job.">
+            <ui:RetryScope.ActivityBody>
+              <ActivityAction>
+                <Sequence DisplayName="Action" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <uda:QueryEntityRecords x:TypeArguments="local:AP_Invoice_Carlos" ContinueOnError="False" DisplayName="Query AP_Invoice_Carlos - oldest first (sort only, no designer filter)" EntityId="1a1f4d42-d7bd-f111-a6a9-6045bddc9767" ExpansionDepth="2" sap2010:WorkflowViewState.IdRef="QueryEntityRecords_1" sap2010:Annotation.AnnotationText="No FilterArguments on purpose: the designer operators 'Equals true' / 'is null' compile but throw at runtime. The eligibility rule is applied with LINQ in the next Assign." OutputRecords="[allRecords]" Skip="0" SortAscending="True" SortByField="[&quot;ProcessedTimestamp&quot;]" TimeoutInMs="60000" Top="100" TotalRecords="[totalRecords]" />
+                </Sequence>
+              </ActivityAction>
+            </ui:RetryScope.ActivityBody>
+            <ui:RetryScope.Condition>
+              <ActivityFunc x:TypeArguments="x:Boolean" />
+            </ui:RetryScope.Condition>
+          </ui:RetryScope>
+          <Assign x:TypeArguments="scg:List(local:AP_Invoice_Carlos)" DisplayName="Assign readyRecords - ready rule (LINQ)" sap2010:WorkflowViewState.IdRef="Assign_6" sap2010:Annotation.AnnotationText="Empty POMatched counts as false, empty ApprovalNeeded as 'needs approval', empty PostedToERP as 'not posted yet'. Where keeps the ProcessedTimestamp order.">
+            <Assign.To>
+              <OutArgument x:TypeArguments="scg:List(local:AP_Invoice_Carlos)">[readyRecords]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="scg:List(local:AP_Invoice_Carlos)">[If(allRecords, CType(New List(Of AP_Invoice_Carlos)(), IList(Of AP_Invoice_Carlos))).Where(Function(r) r.POMatched.GetValueOrDefault(False) AndAlso Not r.ApprovalNeeded.GetValueOrDefault(True) AndAlso Not r.PostedToERP.GetValueOrDefault(False)).ToList()]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Log ready count" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_2" Message="[&quot;Fetched &quot; &amp; If(allRecords Is Nothing, 0, allRecords.Count).ToString() &amp; &quot; of &quot; &amp; totalRecords.ToString() &amp; &quot; record(s); &quot; &amp; readyRecords.Count.ToString() &amp; &quot; ready to post&quot;]" />
+          <If DisplayName="If a ready record exists" sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">[readyRecords.Count &gt; 0]</InArgument>
+            </If.Condition>
+            <If.Then>
+              <Sequence DisplayName="Then - select the oldest ready record" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <Assign x:TypeArguments="local:AP_Invoice_Carlos" DisplayName="Assign selectedRecord" sap2010:WorkflowViewState.IdRef="Assign_7">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="local:AP_Invoice_Carlos">[selectedRecord]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="local:AP_Invoice_Carlos">[readyRecords(0)]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign x:TypeArguments="x:String" DisplayName="Assign out_RecordId = selected record" sap2010:WorkflowViewState.IdRef="Assign_8">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[out_RecordId]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[selectedRecord.Id.ToString()]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_ReadyToPost = True" sap2010:WorkflowViewState.IdRef="Assign_9">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[out_ReadyToPost]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="Else - nothing ready" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - nothing ready" sap2010:WorkflowViewState.IdRef="Assign_10">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">["Nothing ready to post: no AP_Invoice_Carlos record has POMatched true, ApprovalNeeded false and PostedToERP not true."]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Exact-record mode - read only the supplied record" sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <ui:LogMessage DisplayName="Log exact-record mode" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_3" Message="[&quot;Exact-record mode: RecordId &quot; &amp; requestedRecordId &amp; &quot; | ApprovalConfirmed &quot; &amp; in_ApprovalConfirmed.ToString()]" />
+          <TryCatch DisplayName="Try Catch - parse RecordId" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+            <TryCatch.Try>
+              <Sequence DisplayName="Try" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                <Assign x:TypeArguments="s:Guid" DisplayName="Assign recordGuid = Guid.Parse(RecordId)" sap2010:WorkflowViewState.IdRef="Assign_11" sap2010:Annotation.AnnotationText="Guid.Parse in an Assign: Guid.TryParse's out-parameter does not write back in a UiPath VB expression.">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="s:Guid">[recordGuid]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="s:Guid">[Guid.Parse(requestedRecordId)]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </TryCatch.Try>
+            <TryCatch.Catches>
+              <Catch x:TypeArguments="s:FormatException" sap2010:WorkflowViewState.IdRef="Catch_1">
+                <ActivityAction x:TypeArguments="s:FormatException">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="s:FormatException" Name="formatException" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Catch - not a GUID" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                    <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - invalid RecordId" sap2010:WorkflowViewState.IdRef="Assign_12">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["RecordId '" &amp; requestedRecordId &amp; "' is not a valid record GUID. Nothing was posted."]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </Sequence>
+                </ActivityAction>
+              </Catch>
+            </TryCatch.Catches>
+          </TryCatch>
+          <If DisplayName="If RecordId parsed" sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">[String.IsNullOrEmpty(out_ErrorMessage)]</InArgument>
+            </If.Condition>
+            <If.Then>
+              <Sequence DisplayName="Then - read the record by Id" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                <TryCatch DisplayName="Try Catch - read the exact record" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+                  <TryCatch.Try>
+                    <Sequence DisplayName="Try" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                      <ui:RetryScope DisplayName="Retry Scope - Data Fabric read (transient faults)" NumberOfRetries="3" RetryInterval="00:00:05" sap2010:WorkflowViewState.IdRef="RetryScope_2">
+                        <ui:RetryScope.ActivityBody>
+                          <ActivityAction>
+                            <Sequence DisplayName="Action" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                              <uda:GetEntityRecordById x:TypeArguments="local:AP_Invoice_Carlos" ContinueOnError="False" DisplayName="Get AP_Invoice_Carlos record by Id" EntityId="1a1f4d42-d7bd-f111-a6a9-6045bddc9767" ExpansionDepth="2" sap2010:WorkflowViewState.IdRef="GetEntityRecordById_1" OutputEntity="[selectedRecord]" RecordId="[recordGuid]" TimeoutInMs="60000" />
+                            </Sequence>
+                          </ActivityAction>
+                        </ui:RetryScope.ActivityBody>
+                        <ui:RetryScope.Condition>
+                          <ActivityFunc x:TypeArguments="x:Boolean" />
+                        </ui:RetryScope.Condition>
+                      </ui:RetryScope>
+                    </Sequence>
+                  </TryCatch.Try>
+                  <TryCatch.Catches>
+                    <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch_2">
+                      <ActivityAction x:TypeArguments="s:Exception">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="s:Exception" Name="readException" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Catch - record missing or unreadable" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                          <ui:LogMessage DisplayName="Log read failure" Level="Warn" sap2010:WorkflowViewState.IdRef="LogMessage_4" Message="[&quot;Could not read AP_Invoice_Carlos record &quot; &amp; requestedRecordId &amp; &quot;: &quot; &amp; readException.Message]" />
+                          <Assign x:TypeArguments="local:AP_Invoice_Carlos" DisplayName="Assign selectedRecord = Nothing" sap2010:WorkflowViewState.IdRef="Assign_13">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="local:AP_Invoice_Carlos">[selectedRecord]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="local:AP_Invoice_Carlos">[Nothing]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                        </Sequence>
+                      </ActivityAction>
+                    </Catch>
+                  </TryCatch.Catches>
+                </TryCatch>
+                <If DisplayName="If the record was not found" sap2010:WorkflowViewState.IdRef="If_4">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">[selectedRecord Is Nothing]</InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <Sequence DisplayName="Then - missing" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                      <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - record not found" sap2010:WorkflowViewState.IdRef="Assign_14">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:String">["AP_Invoice_Carlos record " &amp; requestedRecordId &amp; " was not found. Nothing was posted."]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </Sequence>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence DisplayName="Else - check eligibility of this record only" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                      <If DisplayName="If PostedToERP is already true" sap2010:WorkflowViewState.IdRef="If_5">
+                        <If.Condition>
+                          <InArgument x:TypeArguments="x:Boolean">[selectedRecord.PostedToERP.GetValueOrDefault(False)]</InArgument>
+                        </If.Condition>
+                        <If.Then>
+                          <Sequence DisplayName="Then - already posted (idempotent)" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                            <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_AlreadyPosted = True" sap2010:WorkflowViewState.IdRef="Assign_15">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Boolean">[out_AlreadyPosted]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </If.Then>
+                        <If.Else>
+                          <Sequence DisplayName="Else - not posted yet" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                            <If DisplayName="If POMatched is not true" sap2010:WorkflowViewState.IdRef="If_6">
+                              <If.Condition>
+                                <InArgument x:TypeArguments="x:Boolean">[Not selectedRecord.POMatched.GetValueOrDefault(False)]</InArgument>
+                              </If.Condition>
+                              <If.Then>
+                                <Sequence DisplayName="Then - not PO-matched" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                                  <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - not PO-matched" sap2010:WorkflowViewState.IdRef="Assign_16">
+                                    <Assign.To>
+                                      <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                                    </Assign.To>
+                                    <Assign.Value>
+                                      <InArgument x:TypeArguments="x:String">["AP_Invoice_Carlos record " &amp; requestedRecordId &amp; " is not eligible: POMatched is not true. Nothing was posted."]</InArgument>
+                                    </Assign.Value>
+                                  </Assign>
+                                </Sequence>
+                              </If.Then>
+                              <If.Else>
+                                <Sequence DisplayName="Else - PO-matched" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                                  <If DisplayName="If approval is needed and not confirmed" sap2010:WorkflowViewState.IdRef="If_7">
+                                    <If.Condition>
+                                      <InArgument x:TypeArguments="x:Boolean">[selectedRecord.ApprovalNeeded.GetValueOrDefault(True) AndAlso Not in_ApprovalConfirmed]</InArgument>
+                                    </If.Condition>
+                                    <If.Then>
+                                      <Sequence DisplayName="Then - approval missing" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                                        <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - approval required" sap2010:WorkflowViewState.IdRef="Assign_17">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:String">["AP_Invoice_Carlos record " &amp; requestedRecordId &amp; " is not eligible: ApprovalNeeded is true (or unset) and ApprovalConfirmed is false. Nothing was posted."]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                      </Sequence>
+                                    </If.Then>
+                                    <If.Else>
+                                      <Sequence DisplayName="Else - eligible" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                                        <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_ReadyToPost = True" sap2010:WorkflowViewState.IdRef="Assign_18">
+                                          <Assign.To>
+                                            <OutArgument x:TypeArguments="x:Boolean">[out_ReadyToPost]</OutArgument>
+                                          </Assign.To>
+                                          <Assign.Value>
+                                            <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+                                          </Assign.Value>
+                                        </Assign>
+                                      </Sequence>
+                                    </If.Else>
+                                  </If>
+                                </Sequence>
+                              </If.Else>
+                            </If>
+                          </Sequence>
+                        </If.Else>
+                      </If>
+                    </Sequence>
+                  </If.Else>
+                </If>
+              </Sequence>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Else>
+    </If>
+    <If DisplayName="If a record was resolved - return its portal values" sap2010:WorkflowViewState.IdRef="If_8">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">[selectedRecord IsNot Nothing]</InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="Then - map portal values" sap2010:WorkflowViewState.IdRef="Sequence_21">
+          <Assign x:TypeArguments="x:String" DisplayName="Assign out_InvoiceNumber" sap2010:WorkflowViewState.IdRef="Assign_19">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[out_InvoiceNumber]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[If(selectedRecord.InvoiceNumber, String.Empty).Trim()]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign x:TypeArguments="x:String" DisplayName="Assign out_VendorName" sap2010:WorkflowViewState.IdRef="Assign_20">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[out_VendorName]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[If(selectedRecord.VendorName, String.Empty).Trim()]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign x:TypeArguments="x:String" DisplayName="Assign out_PONumber" sap2010:WorkflowViewState.IdRef="Assign_21">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[out_PONumber]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[If(selectedRecord.PONumber, String.Empty).Trim()]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign x:TypeArguments="x:String" DisplayName="Assign out_TotalAmountText" sap2010:WorkflowViewState.IdRef="Assign_22">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[out_TotalAmountText]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[If(selectedRecord.TotalAmount.HasValue, selectedRecord.TotalAmount.Value.ToString("0.00", CultureInfo.InvariantCulture), String.Empty)]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <If DisplayName="If ready to post but a portal field is empty" sap2010:WorkflowViewState.IdRef="If_9">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">[out_ReadyToPost AndAlso (String.IsNullOrWhiteSpace(out_VendorName) OrElse String.IsNullOrWhiteSpace(out_InvoiceNumber) OrElse String.IsNullOrWhiteSpace(out_PONumber) OrElse String.IsNullOrWhiteSpace(out_TotalAmountText))]</InArgument>
+            </If.Condition>
+            <If.Then>
+              <Sequence DisplayName="Then - block posting" sap2010:WorkflowViewState.IdRef="Sequence_22">
+                <Assign x:TypeArguments="x:Boolean" DisplayName="Assign out_ReadyToPost = False" sap2010:WorkflowViewState.IdRef="Assign_23">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[out_ReadyToPost]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign x:TypeArguments="x:String" DisplayName="Assign out_ErrorMessage - incomplete record" sap2010:WorkflowViewState.IdRef="Assign_24">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[out_ErrorMessage]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">["AP_Invoice_Carlos record " &amp; out_RecordId &amp; " is missing VendorName, InvoiceNumber, PONumber or TotalAmount. Fix the record before posting."]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Then>
+    </If>
+    <ui:LogMessage DisplayName="Log resolution" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_5" Message="[&quot;ResolveInvoice: RecordId=&quot; &amp; out_RecordId &amp; &quot; | ReadyToPost=&quot; &amp; out_ReadyToPost.ToString() &amp; &quot; | AlreadyPosted=&quot; &amp; out_AlreadyPosted.ToString() &amp; &quot; | Invoice=&quot; &amp; out_InvoiceNumber &amp; &quot; | Error=&quot; &amp; out_ErrorMessage]" />
+  </Sequence>
+</Activity>

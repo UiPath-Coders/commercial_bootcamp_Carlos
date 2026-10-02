@@ -1,0 +1,322 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}"
+ this:Main.ApprovalConfirmed="False"
+ this:Main.PortalUrl="https://commercial-bootcamp-mock-erp.onrender.com/portal/"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:this="clr-namespace:"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="RecordId" Type="InOutArgument(x:String)" />
+    <x:Property Name="ApprovalConfirmed" Type="InArgument(x:Boolean)" />
+    <x:Property Name="PortalUrl" Type="InArgument(x:String)" />
+    <x:Property Name="Posted" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="WasAlreadyPosted" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="PostingId" Type="OutArgument(x:String)" />
+    <x:Property Name="ErrorMessage" Type="OutArgument(x:String)" />
+  </x:Members>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="PostToERP_Carlos - post one AP_Invoice_Carlos invoice (standalone or exact record)" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="resolvedRecordId" />
+      <Variable x:TypeArguments="x:Boolean" Name="resolvedReadyToPost" Default="False" />
+      <Variable x:TypeArguments="x:Boolean" Name="resolvedAlreadyPosted" Default="False" />
+      <Variable x:TypeArguments="x:String" Name="resolveErrorMessage" />
+      <Variable x:TypeArguments="x:String" Name="invoiceNumber" />
+      <Variable x:TypeArguments="x:String" Name="vendorName" />
+      <Variable x:TypeArguments="x:String" Name="poNumber" />
+      <Variable x:TypeArguments="x:String" Name="totalAmountText" />
+    </Sequence.Variables>
+    <Assign x:TypeArguments="x:Boolean" DisplayName="Assign Posted = False" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[Posted]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:Boolean" DisplayName="Assign WasAlreadyPosted = False" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[WasAlreadyPosted]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign PostingId = empty" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[PostingId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign ErrorMessage = empty" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[ErrorMessage]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[String.Empty]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log start" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_1" Message="[&quot;PostToERP_Carlos started. Mode: &quot; &amp; If(String.IsNullOrWhiteSpace(RecordId), &quot;standalone&quot;, &quot;exact record &quot; &amp; RecordId) &amp; &quot; | ApprovalConfirmed: &quot; &amp; ApprovalConfirmed.ToString() &amp; &quot; | Portal: &quot; &amp; PortalUrl]" />
+    <ui:InvokeWorkflowFile DisplayName="ResolveInvoice - Invoke Workflow File" WorkflowFileName="ResolveInvoice.xaml" UnSafe="False" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="in_RecordId">[If(RecordId, String.Empty)]</InArgument>
+        <InArgument x:TypeArguments="x:Boolean" x:Key="in_ApprovalConfirmed">[ApprovalConfirmed]</InArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_RecordId">[resolvedRecordId]</OutArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_ReadyToPost">[resolvedReadyToPost]</OutArgument>
+        <OutArgument x:TypeArguments="x:Boolean" x:Key="out_AlreadyPosted">[resolvedAlreadyPosted]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_ErrorMessage">[resolveErrorMessage]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_InvoiceNumber">[invoiceNumber]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_VendorName">[vendorName]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_PONumber">[poNumber]</OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="out_TotalAmountText">[totalAmountText]</OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <Assign x:TypeArguments="x:String" DisplayName="Assign RecordId = resolved record" sap2010:WorkflowViewState.IdRef="Assign_5" sap2010:Annotation.AnnotationText="Exact-record mode echoes the supplied id (never another record); standalone mode returns the selected record, or blank when nothing is ready.">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[RecordId]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[If(resolvedRecordId, String.Empty)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If DisplayName="If the record is already posted" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">[resolvedAlreadyPosted]</InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="Then - idempotent return, portal not opened" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Assign x:TypeArguments="x:Boolean" DisplayName="Assign Posted = True" sap2010:WorkflowViewState.IdRef="Assign_6">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Boolean">[Posted]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign x:TypeArguments="x:Boolean" DisplayName="Assign WasAlreadyPosted = True" sap2010:WorkflowViewState.IdRef="Assign_7">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Boolean">[WasAlreadyPosted]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Log already posted" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_2" Message="[&quot;Record &quot; &amp; RecordId &amp; &quot; (invoice &quot; &amp; invoiceNumber &amp; &quot;) already has PostedToERP = true. Portal not opened; nothing posted again.&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Else - not posted yet" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <If DisplayName="If the record is not ready to post" sap2010:WorkflowViewState.IdRef="If_2">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">[Not resolvedReadyToPost]</InArgument>
+            </If.Condition>
+            <If.Then>
+              <Sequence DisplayName="Then - return the reason, portal not opened" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                <Assign x:TypeArguments="x:String" DisplayName="Assign ErrorMessage = resolve reason" sap2010:WorkflowViewState.IdRef="Assign_8">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[ErrorMessage]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[If(String.IsNullOrWhiteSpace(resolveErrorMessage), "Record could not be resolved for posting.", resolveErrorMessage)]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="Log not posted" Level="Warn" sap2010:WorkflowViewState.IdRef="LogMessage_3" Message="[ErrorMessage]" />
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="Else - post the invoice in the AP portal (both modes)" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:String" Name="portalPostingId" />
+                  <Variable x:TypeArguments="x:String" Name="portalPostingStatus" />
+                  <Variable x:TypeArguments="x:Boolean" Name="portalSubmitted" Default="False" />
+                </Sequence.Variables>
+                <ui:LogMessage DisplayName="Log ready to post" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_4" Message="[&quot;Posting invoice &quot; &amp; invoiceNumber &amp; &quot; from &quot; &amp; vendorName &amp; &quot; (PO &quot; &amp; poNumber &amp; &quot;, total &quot; &amp; totalAmountText &amp; &quot;) | record &quot; &amp; RecordId]" />
+                <TryCatch DisplayName="Try Catch - portal posting" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                  <TryCatch.Try>
+                    <Sequence DisplayName="Try" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                      <ui:InvokeWorkflowFile DisplayName="PostInvoiceInPortal - Invoke Workflow File" WorkflowFileName="PostInvoiceInPortal.xaml" UnSafe="False" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_PortalUrl">[PortalUrl]</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_VendorName">[vendorName]</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_InvoiceNumber">[invoiceNumber]</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_PONumber">[poNumber]</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_TotalAmountText">[totalAmountText]</InArgument>
+                          <OutArgument x:TypeArguments="x:String" x:Key="out_PostingId">[portalPostingId]</OutArgument>
+                          <OutArgument x:TypeArguments="x:String" x:Key="out_PostingStatus">[portalPostingStatus]</OutArgument>
+                          <OutArgument x:TypeArguments="x:Boolean" x:Key="out_Submitted">[portalSubmitted]</OutArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </Sequence>
+                  </TryCatch.Try>
+                  <TryCatch.Catches>
+                    <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch_1">
+                      <ActivityAction x:TypeArguments="s:Exception">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="s:Exception" Name="portalException" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Catch - portal failed, record left unposted" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                          <Assign x:TypeArguments="x:Boolean" DisplayName="Assign portalSubmitted = False" sap2010:WorkflowViewState.IdRef="Assign_10">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:Boolean">[portalSubmitted]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:Boolean">[False]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Assign x:TypeArguments="x:String" DisplayName="Assign ErrorMessage - portal failure" sap2010:WorkflowViewState.IdRef="Assign_11">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:String">[ErrorMessage]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:String">["Portal posting failed for record " &amp; RecordId &amp; " (invoice " &amp; invoiceNumber &amp; "); PostedToERP was NOT set. " &amp; portalException.GetType().Name &amp; ": " &amp; portalException.Message]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <ui:LogMessage DisplayName="Log portal failure" Level="Error" sap2010:WorkflowViewState.IdRef="LogMessage_6" Message="[ErrorMessage]" />
+                        </Sequence>
+                      </ActivityAction>
+                    </Catch>
+                  </TryCatch.Catches>
+                </TryCatch>
+                <If DisplayName="If the portal confirmed the submission" sap2010:WorkflowViewState.IdRef="If_3">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">[portalSubmitted]</InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <Sequence DisplayName="Then - mark the exact record posted" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                      <Assign x:TypeArguments="x:String" DisplayName="Assign PostingId = portal posting id" sap2010:WorkflowViewState.IdRef="Assign_12">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:String">[PostingId]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:String">[portalPostingId]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <TryCatch DisplayName="Try Catch - Data Fabric update" sap2010:WorkflowViewState.IdRef="TryCatch_2">
+                        <TryCatch.Try>
+                          <Sequence DisplayName="Try" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                            <ui:InvokeWorkflowFile DisplayName="MarkInvoicePosted - Invoke Workflow File" WorkflowFileName="MarkInvoicePosted.xaml" UnSafe="False" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3">
+                              <ui:InvokeWorkflowFile.Arguments>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_RecordId">[RecordId]</InArgument>
+                                <InArgument x:TypeArguments="x:String" x:Key="in_PostingId">[portalPostingId]</InArgument>
+                              </ui:InvokeWorkflowFile.Arguments>
+                            </ui:InvokeWorkflowFile>
+                            <Assign x:TypeArguments="x:Boolean" DisplayName="Assign Posted = True" sap2010:WorkflowViewState.IdRef="Assign_13">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Boolean">[Posted]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Boolean">[True]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </TryCatch.Try>
+                        <TryCatch.Catches>
+                          <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch_2">
+                            <ActivityAction x:TypeArguments="s:Exception">
+                              <ActivityAction.Argument>
+                                <DelegateInArgument x:TypeArguments="s:Exception" Name="updateException" />
+                              </ActivityAction.Argument>
+                              <Sequence DisplayName="Catch - posted in portal but record not updated" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                                <Assign x:TypeArguments="x:String" DisplayName="Assign ErrorMessage - record update failed" sap2010:WorkflowViewState.IdRef="Assign_14">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[ErrorMessage]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">["Portal posting " &amp; portalPostingId &amp; " succeeded for record " &amp; RecordId &amp; " but setting PostedToERP failed; set it manually before any rerun to avoid a duplicate posting. " &amp; updateException.Message]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <ui:LogMessage DisplayName="Log record update failure" Level="Error" sap2010:WorkflowViewState.IdRef="LogMessage_7" Message="[ErrorMessage]" />
+                              </Sequence>
+                            </ActivityAction>
+                          </Catch>
+                        </TryCatch.Catches>
+                      </TryCatch>
+                    </Sequence>
+                  </If.Then>
+                  <If.Else>
+                    <Sequence DisplayName="Else - no confirmation" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                      <If DisplayName="If no error was recorded yet" sap2010:WorkflowViewState.IdRef="If_4">
+                        <If.Condition>
+                          <InArgument x:TypeArguments="x:Boolean">[String.IsNullOrEmpty(ErrorMessage)]</InArgument>
+                        </If.Condition>
+                        <If.Then>
+                          <Sequence DisplayName="Then - report missing confirmation" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                            <Assign x:TypeArguments="x:String" DisplayName="Assign ErrorMessage - no confirmation" sap2010:WorkflowViewState.IdRef="Assign_15">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:String">[ErrorMessage]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:String">["The portal did not confirm the submission for record " &amp; RecordId &amp; " (posting id '" &amp; If(portalPostingId, "") &amp; "', status '" &amp; If(portalPostingStatus, "") &amp; "'); PostedToERP was NOT set. Check the portal before rerunning."]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:LogMessage DisplayName="Log no confirmation" Level="Error" sap2010:WorkflowViewState.IdRef="LogMessage_8" Message="[ErrorMessage]" />
+                          </Sequence>
+                        </If.Then>
+                      </If>
+                    </Sequence>
+                  </If.Else>
+                </If>
+              </Sequence>
+            </If.Else>
+          </If>
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:LogMessage DisplayName="Log result" Level="Info" sap2010:WorkflowViewState.IdRef="LogMessage_5" Message="[&quot;PostToERP_Carlos result: RecordId=&quot; &amp; RecordId &amp; &quot; | Posted=&quot; &amp; Posted.ToString() &amp; &quot; | WasAlreadyPosted=&quot; &amp; WasAlreadyPosted.ToString() &amp; &quot; | PostingId=&quot; &amp; PostingId &amp; &quot; | ErrorMessage=&quot; &amp; ErrorMessage]" />
+  </Sequence>
+</Activity>
