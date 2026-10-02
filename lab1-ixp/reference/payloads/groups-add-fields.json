@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Vendor Name",
+    "type": "Exact Text",
+    "instructions": "Extract the supplier's full legal name exactly as shown in the vendor, supplier, from, remit-to, letterhead, or supplier-of-record area."
+  },
+  {
+    "name": "Vendor Tax ID",
+    "type": "Exact Text",
+    "instructions": "Extract the vendor's US EIN in NN-NNNNNNN format. Preserve leading zeros; do not capture a phone or account number."
+  },
+  {
+    "name": "Invoice Number",
+    "type": "Exact Text",
+    "instructions": "Extract the invoice or document number, including prefixes and punctuation."
+  },
+  {
+    "name": "Invoice Date",
+    "type": "Date",
+    "instructions": "Extract the invoice issue date only, not the purchase-order, ship, or service date. Normalize it to MM/DD/YYYY."
+  },
+  {
+    "name": "PO Number",
+    "type": "Exact Text",
+    "instructions": "Extract the complete purchase-order reference, including its prefix and leading zeros. Watch for OCR confusion between O and 0."
+  },
+  {
+    "name": "Total Amount",
+    "type": "Number",
+    "instructions": "Extract the final grand total payable including tax, never the subtotal or amount before tax."
+  },
+  {
+    "name": "Currency",
+    "type": "Exact Text",
+    "instructions": "Extract the three-letter currency code. When only a dollar sign is present, return USD."
+  },
+  {
+    "name": "Due Date",
+    "type": "Date",
+    "instructions": "Extract the payment due date, or derive it from the invoice date and explicit payment terms. Normalize it to MM/DD/YYYY."
+  }
+]
