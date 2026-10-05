@@ -1,0 +1,30 @@
+{
+  "policyType": "ToolUsePolicy",
+  "organizationId": "3803c63e-5889-4e83-9753-64a99b607021",
+  "tenantId": "63715d8c-7759-413c-82cb-db5521d838c6",
+  "name": "Invoice Approval Tool Use Carlos",
+  "description": "Only the Lab 10 Maestro process InvoiceApprovalProcess_Carlos may invoke the approval agent Invoice_Approval_Agent_Carlos and the RPA process PostToERP_Carlos (both in Agentic Bootcamp/APAutomation_Carlos) as tools. Any other caller (another Maestro process, an agent, a Flow or a case) gets no Allow from this policy and falls to the default Deny. The policy places no limit on which user or robot runs the caller. The POMatch_Carlos functions are not covered, because ToolUsePolicy has no Function resource type. Draft: the caller key is a placeholder until Lab 10 creates the process.",
+  "selectors": [
+    {
+      "resourceType": "Agent",
+      "values": ["90403394-D6E2-4849-9B55-27B94EEBC4D4"],
+      "operator": "Or"
+    },
+    {
+      "resourceType": "RPAWorkflow",
+      "values": ["7AB9607F-95F8-4849-B0A6-BFD591C3FFDB"],
+      "operator": "Or"
+    }
+  ],
+  "executableRule": {
+    "values": [
+      {
+        "type": "AgenticProcess",
+        "values": ["BIND_AFTER_LAB10:InvoiceApprovalProcess_Carlos"],
+        "operator": "Or"
+      }
+    ]
+  },
+  "enforcement": "Allow",
+  "status": "Simulated"
+}
