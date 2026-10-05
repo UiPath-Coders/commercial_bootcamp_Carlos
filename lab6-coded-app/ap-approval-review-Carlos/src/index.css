@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts: geometric display (headers, KPI numbers), neutral grotesk (body), mono (ids, amounts, times). */
+  --font-display: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Gate page: UiPath sign-in blue. */
+  --color-brand-50: #eef5fe;
+  --color-brand-100: #d6e7fd;
+  --color-brand-200: #a9cdfa;
+  --color-brand-500: #1a7ae8;
+  --color-brand-600: #0067df;
+  --color-brand-700: #0056ba;
+  --color-brand-800: #004596;
+  --color-brand-900: #0b2f66;
+  --color-brand-950: #071d40;
+
+  /* Worklist: one deep teal accent for primary actions, charts and focus. */
+  --color-accent-50: #effaf8;
+  --color-accent-100: #d3f0eb;
+  --color-accent-200: #a6e0d7;
+  --color-accent-400: #3fb3a3;
+  --color-accent-500: #1a9686;
+  --color-accent-600: #0f7a6d;
+  --color-accent-700: #0d6158;
+  --color-accent-800: #0c4e48;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-slate-50 font-sans text-slate-900 antialiased;
+}
