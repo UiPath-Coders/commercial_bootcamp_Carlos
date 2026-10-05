@@ -1,0 +1,2 @@
+Lab 8 bucket test file (synthetic, non-sensitive).
+Purpose: verify upload to InvoiceEvidence_Lab. Contains no vendor, banking, tax or credential data.
